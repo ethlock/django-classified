@@ -12,6 +12,7 @@ from sorl.thumbnail import ImageField
 from unidecode import unidecode
 
 from . import settings as dcf_settings
+from .l10n.models import AdminSubarea
 
 
 class Profile(models.Model):
@@ -31,7 +32,7 @@ class Profile(models.Model):
 
 
 @python_2_unicode_compatible
-class Area(models.Model):
+class Area(AdminSubarea):
     slug = models.SlugField()
     title = models.CharField(_('title'), max_length=100)
 
