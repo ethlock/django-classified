@@ -7,14 +7,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    author='Sergey Lyapustin',
+    author='Ethan Lock',
     name="django-classified",
     version=get_version().replace(' ', '-'),
-    author_email="inoks@mail.ru",
+    author_email="enlinq@outlook.com",
     description="Django classified ads",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/inoks/django-classified",
+    url="https://github.com/everyi/django-classified",
     keywords='django classified ads',
     packages=setuptools.find_packages(exclude=('demo',)),
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
