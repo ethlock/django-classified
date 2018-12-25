@@ -72,7 +72,7 @@ class AdminArea(models.Model):
     """
     Administrative Area level 1 for a country.  For the US, this would be the states
     """
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
     name = models.CharField(_('Admin Area name'), max_length=60, )
     abbrev = models.CharField(_('Postal Abbreviation'), max_length=3, null=True, blank=True)
     active = models.BooleanField(_('Area is active'), default=True)
@@ -90,7 +90,7 @@ class AdminSubarea(models.Model):
     """
     Administrative Area level 2 for a country. 
     """
-    admin_area = models.ForeignKey(AdminArea)
+    admin_area = models.ForeignKey(AdminArea, on_delete=models.CASCADE)
     name = models.CharField(_('Admin Sub-area name'), max_length=60, )
     abbrev = models.CharField(_('Postal Abbreviation'), max_length=3, null=True, blank=True)
     active = models.BooleanField(_('Area is active'), default=True)
@@ -108,7 +108,7 @@ class Currency(models.Model):
     """
     Capture international currency codes as defined by ISO 4217:2008
     """
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
     currency = models.CharField(_('Currency'), max_length=50, blank=True, null=True)
     alphabetic_code = models.CharField(_('Alphabetic Code'), max_length=3, blank=True, null=True)
     numeric_code = models.IntegerField(_('Numeric Code'), null=True)
