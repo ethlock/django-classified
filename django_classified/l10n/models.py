@@ -67,6 +67,9 @@ class Country(models.Model):
     def __unicode__(self):
         return self.printable_name
 
+    def __str__(self):
+        return self.printable_name
+
 
 class AdminArea(models.Model):
     """
@@ -83,6 +86,9 @@ class AdminArea(models.Model):
         ordering = ('name',)
 
     def __unicode__(self):
+        return self.name
+
+    def __str__(self):
         return self.name
 
 
@@ -103,6 +109,9 @@ class AdminSubarea(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def __str__(self):
+        return self.name
     
 class Currency(models.Model):
     """
@@ -118,4 +127,8 @@ class Currency(models.Model):
         verbose_name = _('Currency')
         verbose_name_plural = _('Currencies')
         unique_together=('country', 'currency')
+
+    def __str__(self):
+        return self.currency
+    
     
