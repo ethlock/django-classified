@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
@@ -11,9 +11,11 @@ from django.views.generic import DetailView, CreateView, UpdateView, ListView, D
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin
+from django.conf import settings
+from django.apps import apps
 
 from . import settings as dcf_settings
-from .forms import ItemForm, ProfileForm, SearchForm
+from .forms import ItemForm, ProfileForm, SearchForm, UserForm, PhoneWidget
 from .models import Item, Image, Group, Section, Profile, Area
 
 
@@ -257,3 +259,27 @@ class SetAreaView(View):
         next_url = self.request.GET.get('next') or reverse_lazy('django_classified:index')
 
         return redirect(next_url)
+
+class AltProfileView(FormsetMixin, UpdateView):
+    is_update_view = True
+    model = apps.get_model(settings.AUTH_USER_MODEL)
+    form_class = UserForm
+    formset_class = inlineformset_factory(model, Profile, fields=('phone',), widgets={'phone': PhoneWidget})
+    template_name = 'django_classified/alt_profile.html'
+    success_url = reverse_lazy('django_classified:profile')
+    
+    def get_object(self, *args, **kwargs):
+        return self.request.user
+
+    def form_valid(self, form, formset):
+        self.object = form.save()
+        formset.instance = self.object
+        formset.save()
+        if hasattr(self, 'get_success_message'):
+            self.get_success_message(form)
+        return redirect(self.success_url)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AltProfileView, self).dispatch(*args, **kwargs)
+    

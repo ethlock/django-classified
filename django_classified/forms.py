@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 from django import forms
 from django.utils.translation import ugettext as _
+from django.conf import settings
+from django.apps import apps
 
 from .models import Item, Group, Profile, Area
 
@@ -51,3 +53,14 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             'phone': PhoneWidget
         }
+
+        
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = apps.get_model(settings.AUTH_USER_MODEL)
+        fields = (
+            'first_name',
+            'last_name',
+        )
+            
+

@@ -3,7 +3,7 @@ from django.contrib import admin
 from sorl.thumbnail.admin import AdminImageMixin
 from django.utils.translation import get_language, ugettext_lazy as _
 
-from .models import Section, Group, Item, Image, Area
+from .models import Section, Group, Item, Image, Area, Profile
 from .l10n.models import Country, AdminArea, AdminSubarea, Currency
 
 
@@ -126,7 +126,10 @@ class AdminAreaOptions(admin.ModelAdmin):
     actions = ('make_active', 'make_inactive')
     inlines = [AdminSubarea_Inline]
 
-
+# Profile admin
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone', 'receive_news')
+    
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Section, SectionAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -134,3 +137,5 @@ admin.site.register(Item, ItemAdmin)
 
 admin.site.register(Country, CountryOptions)
 admin.site.register(AdminArea, AdminAreaOptions)
+
+admin.site.register(Profile, ProfileAdmin)
