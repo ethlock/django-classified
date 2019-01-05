@@ -8,6 +8,8 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.six import python_2_unicode_compatible
 from django.utils.translation import ugettext as _
+from django.core.exceptions import ValidationError
+
 from sorl.thumbnail import ImageField
 from unidecode import unidecode
 
@@ -176,7 +178,20 @@ class Item(models.Model):
             self.slug = slugify(unidecode(self.title))
         super(Item, self).save(*args, **kwargs)
 
+def file_size(value):
+    """Validator to cap file size of ImageField or FileField.
+    
+    Reference: 
+    https://docs.djangoproject.com/en/2.1/ref/validators/
+
+    Args:
+    value -- the field to be validated
+    """
+    limit = dcf_settings.IMAGE_MAX_SIZE
+    if value.size > limit:
+        raise ValidationError('File too large. Size should not exceed %.1f MiB' % (limit/(1024*1024)))
+
 
 class Image(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    file = ImageField(_('image'), upload_to='images')
+    file = ImageField(_('image'), upload_to='images', validators=[file_size])

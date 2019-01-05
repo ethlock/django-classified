@@ -155,9 +155,10 @@ class ItemDetailView(DetailView):
 
 class ItemUpdateView(FormsetMixin, UpdateView):
     is_update_view = True
+    max_image = dcf_settings.IMAGE_MAX_NUMBER
     model = Item
     form_class = ItemForm
-    formset_class = inlineformset_factory(Item, Image, fields=('file',))
+    formset_class = inlineformset_factory(Item, Image, fields=('file',),  max_num=max_image)
 
     def get_object(self, *args, **kwargs):
         obj = super(ItemUpdateView, self).get_object(*args, **kwargs)
@@ -172,9 +173,10 @@ class ItemUpdateView(FormsetMixin, UpdateView):
 
 class ItemCreateView(FormsetMixin, CreateView):
     is_update_view = False
+    max_image = dcf_settings.IMAGE_MAX_NUMBER
     model = Item
     form_class = ItemForm
-    formset_class = inlineformset_factory(Item, Image, extra=3, fields=('file', ))
+    formset_class = inlineformset_factory(Item, Image, fields=('file', ), max_num=max_image)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

@@ -38,4 +38,10 @@ SITEMAP_LIMIT = getattr(settings, 'DCF_SITEMAP_LIMIT', 1000)
 # Display empty group in the groups list
 DISPLAY_EMPTY_GROUPS = getattr(settings, 'DCF_DISPLAY_EMPTY_GROUPS', False)
 
+# Image file size limit
+IMAGE_MAX_SIZE = getattr(settings, 'DCF_IMAGE_MAX_SIZE', 1*1024*1024)
+
+# Image number limit for each item
+IMAGE_MAX_NUMBER = getattr(settings, 'DCF_IMAGE_MAX_NUMBER', 3)
+
 VERSION = get_version()
