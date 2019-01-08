@@ -23,7 +23,7 @@ class Profile(models.Model):
     receive_news = models.BooleanField(_('receive news'), default=True, db_index=True)
 
     def allow_add_item(self):
-        return self.user.item_set.count() < dcf_settings.ITEM_PER_USER_LIMIT
+        return self.user.item_set.count() < dcf_settings.ITEM_PER_USER_LIMIT or user.is_staff
 
     @staticmethod
     def get_or_create_for_user(user):
