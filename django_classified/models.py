@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 
 from sorl.thumbnail import ImageField
 from unidecode import unidecode
+from ordered_model.models import OrderedModel
 
 from . import settings as dcf_settings
 from .l10n.models import AdminSubarea
@@ -64,7 +65,7 @@ class Area(AdminSubarea):
 
 
 @python_2_unicode_compatible
-class Section(models.Model):
+class Section(OrderedModel):
     title = models.CharField(_('title'), max_length=100)
 
     def __str__(self):
@@ -83,10 +84,11 @@ class Section(models.Model):
 
 
 @python_2_unicode_compatible
-class Group(models.Model):
+class Group(OrderedModel):
     slug = models.SlugField(blank=True, null=True)
     title = models.CharField(_('title'), max_length=100)
     section = models.ForeignKey('Section', verbose_name=_('section'), on_delete=models.CASCADE)
+    order_with_respect_to = 'section'
 
     def __str__(self):
         return '%s - %s' % (self.section.title, self.title)
@@ -115,7 +117,7 @@ class ActiveManager(models.Manager):
 
 
 @python_2_unicode_compatible
-class Item(models.Model):
+class Item(OrderedModel):
     slug = models.SlugField(blank=True, null=True, max_length=100)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, verbose_name=_('group'), on_delete=models.CASCADE)
@@ -127,6 +129,7 @@ class Item(models.Model):
     is_active = models.BooleanField(_('active'), default=True, db_index=True)
     updated = models.DateTimeField(_('updated'), auto_now=True, db_index=True)
     posted = models.DateTimeField(_('posted'), auto_now_add=True)
+    order_with_respect_to = 'group'
 
     objects = models.Manager()
     active = ActiveManager()

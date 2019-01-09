@@ -36,5 +36,6 @@ setuptools.setup(
         "unidecode",
         # Babel is used for currency formatting
         'Babel>=1.0,<3.0',
+        'django-ordered-model>=3.0',
     ],
 )

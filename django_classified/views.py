@@ -52,8 +52,8 @@ class SectionListView(TemplateView):
 
         object_list = []
         # Prepare list of tuples with object/count
-        for section in Section.objects.all():
-            groups = [(group, items_qs.filter(group=group).count()) for group in section.group_set.all()]
+        for section in Section.objects.all().order_by('order'):
+            groups = [(group, items_qs.filter(group=group).count()) for group in section.group_set.all().order_by('order')]
             object_list.append(dict(
                 section=(section, items_qs.filter(group__section=section).count()),
                 groups=groups

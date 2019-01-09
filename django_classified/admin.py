@@ -2,6 +2,7 @@
 from django.contrib import admin
 from sorl.thumbnail.admin import AdminImageMixin
 from django.utils.translation import get_language, ugettext_lazy as _
+from ordered_model.admin import OrderedModelAdmin
 
 from .models import Section, Group, Item, Image, Area, Profile
 from .l10n.models import Country, AdminArea, AdminSubarea, Currency
@@ -12,23 +13,26 @@ class ImageInline(AdminImageMixin, admin.StackedInline):
     extra = 5
 
 
-class ItemAdmin(admin.ModelAdmin):
+class ItemAdmin(OrderedModelAdmin):
     prepopulated_fields = {'slug': ('title',), }
-    list_display = ('title', 'group', 'area', 'user', 'is_active', 'posted', 'updated')
+    list_display = ('title', 'group', 'area', 'user', 'is_active', 'posted', 'updated', 'order', 'move_up_down_links')
     list_filter = ('area', 'group', 'is_active', 'posted',)
     search_fields = ('title', 'description', 'user__email')
     inlines = [ImageInline]
+    ordering = ['order',]
 
 
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(OrderedModelAdmin):
     prepopulated_fields = {'slug': ('title',), }
-    list_display = ('title', 'slug', 'section', 'count')
+    list_display = ('title', 'slug', 'section', 'count', 'order', 'move_up_down_links')
     list_filter = ('section',)
     search_fields = ('title', 'section__title')
+    ordering = ['order',]
 
 
-class SectionAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+class SectionAdmin(OrderedModelAdmin):
+    list_display = ('title', 'order', 'move_up_down_links')
+    ordering = ['order',]
 
 
 class AreaAdmin(admin.ModelAdmin):
