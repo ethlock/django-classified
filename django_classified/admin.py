@@ -21,6 +21,11 @@ class ItemAdmin(OrderedModelAdmin):
     inlines = [ImageInline]
     ordering = ['order',]
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "group":
+            kwargs["queryset"] = Group.objects.all().order_by('section__order', 'order')
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
 
 class GroupAdmin(OrderedModelAdmin):
     prepopulated_fields = {'slug': ('title',), }
